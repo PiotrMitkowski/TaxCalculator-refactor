@@ -12,8 +12,9 @@ public class TaxCalculator {
         try {
             InputParameters parameters = new ConsoleInputProvider().provide();
             new TaxCalculationExecutor(parameters).run();
-        } catch (IOException | UnknownContractTypeException exception) {
-            exception.printStackTrace();
+        } catch (IOException | UnknownContractTypeException | ReflectiveOperationException exception) {
+            System.out.println("Error: " + exception.getMessage());
+            main(args);
         }
     }
 }
