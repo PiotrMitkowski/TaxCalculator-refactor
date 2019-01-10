@@ -1,4 +1,4 @@
-package main;
+package main.presenting;
 
 public class Logger implements Presenter {
 

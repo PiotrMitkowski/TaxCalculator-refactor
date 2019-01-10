@@ -1,9 +1,9 @@
 package main.contract;
 
-import main.HealthInsuranceCompounds;
-import main.Presenter;
-import main.SocialTaxCompounds;
-import main.TaxCompounds;
+import main.tax.compounds.HealthInsuranceCompounds;
+import main.presenting.Presenter;
+import main.tax.compounds.SocialTaxCompounds;
+import main.tax.compounds.TaxCompounds;
 
 import java.text.DecimalFormat;
 

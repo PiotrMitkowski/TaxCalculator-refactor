@@ -1,7 +1,7 @@
 package main.contract;
 
-import main.HealthInsuranceCompounds;
-import main.Logger;
+import main.tax.compounds.HealthInsuranceCompounds;
+import main.presenting.Logger;
 
 public class CivilContract extends Contract {
 

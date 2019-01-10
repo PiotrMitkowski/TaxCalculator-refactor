@@ -1,8 +1,9 @@
 package main.contract;
 
-import main.HealthInsuranceCompounds;
-import main.SocialTaxCompounds;
-import main.TaxCompounds;
+import main.tax.compounds.HealthInsuranceCompounds;
+import main.tax.compounds.SocialTaxCompounds;
+import main.tax.compounds.TaxCompounds;
+import org.jetbrains.annotations.NotNull;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -10,7 +11,7 @@ import java.math.RoundingMode;
 public abstract class Contract {
 
     private Double income;
-    static double exemptedValue = 46.33; // reduced value 46,33 PLN
+    static double exemptedValue = 46.33;
 
     Contract(Double income) {
         this.income = income;
@@ -27,7 +28,7 @@ public abstract class Contract {
         TaxCompounds taxCompounds = calculateTaxCompounds();
         double taxBasis = calculateTaxBasis(taxCompounds.getSocialTaxCompounds());
         double taxBasis0 = this.round(taxBasis, 2);
-        Double advanceTax = calculateBasis(taxBasis0);
+        Double advanceTax = calculateAdvanceForTax(taxBasis0);
         Double advanceTaxOffice = calculateAdvance(advanceTax, taxCompounds.getHealthInsuranceCompounds());
         double advanceTaxOffice0 = this.round(advanceTaxOffice, 2);
         double salary = calculateSalary(taxCompounds.getHealthInsuranceCompounds(), taxCompounds.getSocialTaxCompounds(), advanceTaxOffice0);
@@ -35,7 +36,7 @@ public abstract class Contract {
         return new ContractTaxSummary(income, taxCompounds, salary, taxBasis, advanceTax, advanceTaxOffice, exemptedValue, incomeCost);
     }
 
-    private Double calculateBasis(double basis) {
+    private Double calculateAdvanceForTax(double basis) {
         return (basis * 18) / 100;
     }
 
@@ -47,16 +48,19 @@ public abstract class Contract {
         return new HealthInsuranceCompounds(healthInsuranceBasis);
     }
 
+    @NotNull
     private Double calculateSalary(HealthInsuranceCompounds healthInsuranceCompounds, SocialTaxCompounds socialTaxCompounds, Double advanceTaxOffice) {
         return income - ((socialTaxCompounds.getPensionTax() + socialTaxCompounds.getDisabledTax() + socialTaxCompounds.getIllnessInsurance()) + healthInsuranceCompounds.getHigherRateInsurance() + advanceTaxOffice);
     }
 
+    @NotNull
     private TaxCompounds calculateTaxCompounds() {
         SocialTaxCompounds socialTaxCompounds = calculateSocialTaxes(income);
         HealthInsuranceCompounds healthInsuranceCompounds = calculateInsurance(socialTaxCompounds.getHealthInsuranceBasis());
         return new TaxCompounds(socialTaxCompounds, healthInsuranceCompounds);
     }
 
+    @NotNull
     private Double calculateTaxBasis(SocialTaxCompounds compounds) {
         return compounds.getHealthInsuranceBasis() - 111.25;
     }

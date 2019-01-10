@@ -1,4 +1,4 @@
-package main;
+package main.tax.compounds;
 
 public class TaxCompounds {
     private SocialTaxCompounds socialTaxCompounds;
